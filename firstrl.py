@@ -601,12 +601,12 @@ def place_objects(room):
             elif choice == 'sword':
                 #create a sword
                 equipment_component = Equipment(slot='right hand', power_bonus=3)
-                item = object(x, y, '/', 'sword', libtcod.sky, equipment=equipment_component)
+                item = Object(x, y, '/', 'sword', libtcod.sky, equipment=equipment_component)
 
             elif choice == 'shield':
                 #create a shield
                 equipment_component = Equipment(slot='left hand', defense_bonus=1)
-                item = object(x, y, '[', 'shield', libtcod.darker_orange, equipment=equipment_component)
+                item = Object(x, y, '[', 'shield', libtcod.darker_orange, equipment=equipment_component)
 
             objects.append(item)
             item.send_to_back() #items appear below other objects
