@@ -238,9 +238,6 @@ $RECYCLE.BIN/
 
 #Personally Added
 old/
-HoursCalcVenv/
-TimeSheetReport*
-YearlyPay*
-Pay*
-!/savegame
-!/Build_Rogue.bat
+venv/
+/Build_Rogue.bat
+/savegame
