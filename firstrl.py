@@ -523,7 +523,8 @@ def place_objects(room):
 
     #chance of each monster
     monster_chances = {}
-    monster_chances['orc'] = 80  #orc always shows up, even if all other monsters have 0 chance
+    monster_chances['goblin'] = from_dungeon_level([[60, 1], [40, 2], [20, 3], [0, 4]])
+    monster_chances['orc'] = from_dungeon_level([[20, 1], [40, 2], [60, 3], [80, 4]])
     monster_chances['troll'] = from_dungeon_level([[15, 3], [30, 5], [60, 7]])
 
     #maximum number of items per room [value, level]
@@ -550,18 +551,22 @@ def place_objects(room):
         #only place it if the tile is not blocked
         if not is_blocked(x, y):
             choice = random_choice(monster_chances)
+            if choice == 'goblin':
+                #create a goblin
+                fighter_component = Fighter(hp=10, defense=0, power=2, xp=15, death_function=monster_death)
+                ai_component = BasicMonster()
+                monster = Object(x, y, 'g', 'Goblin', libtcod.lightest_purple,
+                    blocks=True, fighter=fighter_component, ai=ai_component)
             if choice == 'orc':
                 #create an orc
                 fighter_component = Fighter(hp=20, defense=0, power=4, xp=35, death_function=monster_death)
                 ai_component = BasicMonster()
-
                 monster = Object(x, y, 'o', 'orc', libtcod.desaturated_green,
                     blocks=True, fighter=fighter_component, ai=ai_component)
             elif choice == 'troll':
                 #create a troll
                 fighter_component = Fighter(hp=30, defense=2, power=8, xp=100, death_function=monster_death)
                 ai_component = BasicMonster()
-
                 monster = Object(x, y, 'T', 'troll', libtcod.darker_green,
                     blocks=True, fighter=fighter_component, ai=ai_component)
 
