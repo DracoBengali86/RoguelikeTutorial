@@ -555,7 +555,7 @@ def place_objects(room):
                 #create a goblin
                 fighter_component = Fighter(hp=10, defense=0, power=2, xp=15, death_function=monster_death)
                 ai_component = BasicMonster()
-                monster = Object(x, y, 'g', 'Goblin', libtcod.lightest_purple,
+                monster = Object(x, y, 'g', 'Goblin', libtcod.light_purple,
                     blocks=True, fighter=fighter_component, ai=ai_component)
             if choice == 'orc':
                 #create an orc
