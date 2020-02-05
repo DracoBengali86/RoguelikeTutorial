@@ -242,7 +242,7 @@ class ConfusedMonster:
     def take_turn(self):
         if self.num_turns > 0:  #still confused...
             #move in a random direction
-            self.owner.move(libtcod.random_get_int(0, 01, 1), libtcod.random_get_int(0, -1, 1))
+            self.owner.move(libtcod.random_get_int(0, -1, 1), libtcod.random_get_int(0, -1, 1))
             self.num_turns -= 1
 
         else:  #restore the previous AI (this one will be deleted becaause it's not referenced anymore)
