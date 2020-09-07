@@ -190,5 +190,6 @@ $RECYCLE.BIN/
 
 #Personally Added
 venv/
+venv38/
 /Build_Rogue.bat
 /savegame
