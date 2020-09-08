@@ -25,7 +25,7 @@ def new_tile(
     *,  # Enforce the use of keywords, so that parameter order doesn't matter.
     walkable: int,
     transparent: int,
-    dark: Tuple[int, Tuble[int, int, int], Tuple[int, int, int]],
+    dark: Tuple[int, Tuple[int, int, int], Tuple[int, int, int]],
 ) -> np.ndarray:
     """Helper function for defining individual tile types """
     return np.array((walkable, transparent, dark), dtype=tile_dt)
