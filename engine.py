@@ -60,12 +60,14 @@ class Engine:
         for i in range(box_x, box_x + width):
             for j in range(box_y, box_y + height):
                 if math.sqrt((i - x) ** 2 + (j - y) ** 2) <= radius:
-                    self.game_map.highlight[i, j] = True
+                    self.game_map.highdark[i, j] = True
 
-        self.game_map.highlight &= self.game_map.explored
+        self.game_map.highdark &= self.game_map.explored
+        self.game_map.highlight = self.game_map.highdark & self.game_map.visible
 
     def highlight_clear(self) -> None:
         self.game_map.highlight[:] = False
+        self.game_map.highdark[:] = False
 
     def render(self, console: Console) -> None:
         self.game_map.render(console)
