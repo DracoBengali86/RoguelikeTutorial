@@ -118,6 +118,7 @@ class AskUserEventHandler(EventHandler):
         """Return to the main event handler when a valid action was performed."""
         if super().handle_action(action):
             self.engine.event_handler = MainGameEventHandler(self.engine)
+            self.engine.highlight_clear()
             return True
         return False
 
@@ -144,6 +145,7 @@ class AskUserEventHandler(EventHandler):
         by default this returns to the main event handler.
         """
         self.engine.event_handler = MainGameEventHandler(self.engine)
+        self.engine.highlight_clear()
         return None
 
 
@@ -330,14 +332,17 @@ class AreaRangedAttackHandler(SelectIndexHandler):
         x, y = self.engine.mouse_location
 
         # Draw a rectangle around the targeted area, so the player can see the affected tiles.
-        console.draw_frame(
-            x=x - self.radius - 1,
-            y=y - self.radius - 1,
-            width=self.radius ** 2,
-            height=self.radius ** 2,
-            fg=color.red,
-            clear=False,
-        )
+        if self.engine.highlight:
+            self.engine.update_highlight(x, y, self.radius)
+        else:
+            console.draw_frame(
+                x=x - self.radius - 1,
+                y=y - self.radius - 1,
+                width=self.radius ** 2,
+                height=self.radius ** 2,
+                fg=color.red,
+                clear=False,
+            )
 
     def on_index_selected(self, x: int, y: int) -> Optional[Action]:
         return self.callback((x, y))

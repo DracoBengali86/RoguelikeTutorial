@@ -6,6 +6,7 @@ from tcod.console import Console
 from tcod.map import compute_fov
 
 import exceptions
+import math
 from input_handlers import MainGameEventHandler
 from message_log import MessageLog
 from render_functions import render_bar, render_names_at_mouse_location
@@ -19,11 +20,12 @@ if TYPE_CHECKING:
 class Engine:
     game_map: GameMap
 
-    def __init__(self, player: Actor):
+    def __init__(self, player: Actor, highlight: bool = False):
         self.event_handler: EventHandler = MainGameEventHandler(self)
         self.message_log = MessageLog()
         self.mouse_location = (0, 0)
         self.player = player
+        self.highlight = highlight
 
     def handle_enemy_turns(self) -> None:
         for entity in set(self.game_map.actors) - {self.player}:
@@ -42,6 +44,28 @@ class Engine:
         )
         # If a tile is "visible" it should be added to "explored".
         self.game_map.explored |= self.game_map.visible
+
+    def update_highlight(self, x: int, y: int, radius: int) -> None:
+        """Highlight area around point that is within a given radius"""
+        self.highlight_clear()
+
+        if not self.highlight:
+            return None
+
+        box_x = x - radius - 1
+        box_y = y - radius - 1
+        width = radius ** 2
+        height = radius ** 2
+
+        for i in range(box_x, box_x + width):
+            for j in range(box_y, box_y + height):
+                if math.sqrt((i - x) ** 2 + (j - y) ** 2) <= radius:
+                    self.game_map.highlight[i, j] = True
+
+        self.game_map.highlight &= self.game_map.explored
+
+    def highlight_clear(self) -> None:
+        self.game_map.highlight[:] = False
 
     def render(self, console: Console) -> None:
         self.game_map.render(console)

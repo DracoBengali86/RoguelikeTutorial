@@ -28,6 +28,9 @@ class GameMap:
         self.explored = np.full(
             (width, height), fill_value=False, order="F"
         )  # Tiles the player has seen before
+        self.highlight = np.full(
+            (width, height), fill_value=False, order="F"
+        )  # Tiles highlighted by a spell's AOE range
 
     @property
     def gamemap(self) -> GameMap:
@@ -79,8 +82,8 @@ class GameMap:
         Otherwise, the default is "SHROUD".
         """
         console.tiles_rgb[0: self.width, 0: self.height] = np.select(
-            condlist=[self.visible, self.explored],
-            choicelist=[self.tiles["light"], self.tiles["dark"]],
+            condlist=[self.highlight, self.visible, self.explored],
+            choicelist=[self.tiles["highlight"], self.tiles["light"], self.tiles["dark"]],
             default=tile_types.SHROUD,
         )
 

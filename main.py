@@ -24,13 +24,15 @@ def main() -> None:
     max_monsters_per_room = 2
     max_items_per_room = 2
 
+    highlight_spell_radius = True
+
     tileset = tcod.tileset.load_tilesheet(
         "dejavu10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )
 
     player = copy.deepcopy(entity_factories.player)
 
-    engine = Engine(player=player)
+    engine = Engine(player=player, highlight=highlight_spell_radius)
 
     engine.game_map = generate_dungeon(
         max_rooms=max_rooms,
