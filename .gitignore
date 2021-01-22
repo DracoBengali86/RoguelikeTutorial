@@ -192,4 +192,6 @@ $RECYCLE.BIN/
 venv/
 venv38/
 /Build_Rogue.bat
-/savegame
+
+# Saved games
+*.sav

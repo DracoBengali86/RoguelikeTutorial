@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import lzma
+import pickle
 from typing import TYPE_CHECKING
 
 from tcod.console import Console
@@ -7,21 +9,18 @@ from tcod.map import compute_fov
 
 import exceptions
 import math
-from input_handlers import MainGameEventHandler
 from message_log import MessageLog
 from render_functions import render_bar, render_names_at_mouse_location
 
 if TYPE_CHECKING:
     from entity import Actor
     from game_map import GameMap
-    from input_handlers import EventHandler
 
 
 class Engine:
     game_map: GameMap
 
     def __init__(self, player: Actor, highlight: bool = False):
-        self.event_handler: EventHandler = MainGameEventHandler(self)
         self.message_log = MessageLog()
         self.mouse_location = (0, 0)
         self.player = player
@@ -52,13 +51,20 @@ class Engine:
         if not self.highlight:
             return None
 
+        # Get starting coordinate and width and height of box to highlight
         box_x = x - radius - 1
         box_y = y - radius - 1
         width = radius ** 2
         height = radius ** 2
 
-        for i in range(box_x, box_x + width):
-            for j in range(box_y, box_y + height):
+        # Bound box values to edges of the map
+        min_x = max(0, box_x)
+        max_x = min(box_x + width, self.game_map.width)
+        min_y = max(0, box_y)
+        max_y = min(box_y + height, self.game_map.height)
+
+        for i in range(min_x, max_x):
+            for j in range(min_y, max_y):
                 if math.sqrt((i - x) ** 2 + (j - y) ** 2) <= radius:
                     self.game_map.highdark[i, j] = True
 
@@ -82,3 +88,9 @@ class Engine:
         )
 
         render_names_at_mouse_location(console=console, x=21, y=44, engine=self)
+
+    def save_as(self, filename: str) -> None:
+        """Save this Engine instance as a compressed file."""
+        save_data = lzma.compress(pickle.dumps(self))
+        with open(filename, "wb") as f:
+            f.write(save_data)
