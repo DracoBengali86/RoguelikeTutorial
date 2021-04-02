@@ -189,9 +189,8 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/python,windows,pycharm
 
 #Personally Added
-venv/
 venv38/
-/Build_Rogue.bat
+/Build_Rogue*.bat
 
 # Saved games
 *.sav
